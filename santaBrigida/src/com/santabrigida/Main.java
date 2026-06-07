@@ -20,6 +20,7 @@ public class Main {
 
 		ventana.setLocationRelativeTo(null);
 		ventana.setVisible(true);
+		ventana.setResizable(true);
 
 		pdj.configuracionDeJuego();
 		pdj.iniciarHiloDeJuego();
