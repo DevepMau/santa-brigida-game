@@ -16,19 +16,20 @@ public class PanelDeJuego extends JPanel implements Runnable {
 	final int escala = 3;
 
 	public final int tamañoDeBaldosa = tamañoOriginalDeBaldosa * escala;
-	public final int maxColDePantalla = 16;
+	public final int maxColDePantalla = 20;
 	public final int maxFilaDePantalla = 12;
 	public final int anchoDePantalla = tamañoDeBaldosa * maxColDePantalla;
 	public final int altoDePantalla = tamañoDeBaldosa * maxFilaDePantalla;
 	
 	//CONFIGURACION DEL MUNDO
-	public final int maxColDeMundo = 16;
+	public final int maxColDeMundo = 20;
 	public final int maxFilaDeMundo = 12;
 	public final int anchoMundo = tamañoDeBaldosa * maxColDeMundo;
 	public final int altoMundo = tamañoDeBaldosa * maxFilaDeMundo;
 
 	//SISTEMA
 	public Teclado teclado = new Teclado(this);
+	Raton raton = new Raton(this);
 	Sonido musica = new Sonido();
 	Sonido se = new Sonido();
 	Thread hiloDeJuego;
@@ -54,6 +55,8 @@ public class PanelDeJuego extends JPanel implements Runnable {
 		this.setDoubleBuffered(true);
 		this.addKeyListener(teclado);
 		this.setFocusable(true);
+		this.addMouseListener(raton);
+	    this.addMouseMotionListener(raton);
 
 	}
 	
