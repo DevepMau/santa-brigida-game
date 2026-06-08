@@ -5,7 +5,11 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+import com.santabrigida.ui.GestorUI;
 
 public class PanelDeJuego extends JPanel implements Runnable {
 
@@ -32,9 +36,13 @@ public class PanelDeJuego extends JPanel implements Runnable {
 	Raton raton = new Raton(this);
 	Sonido musica = new Sonido();
 	Sonido se = new Sonido();
+	GestorUI ui = new GestorUI(this);
 	Thread hiloDeJuego;
 	
 	//ENTIDADES Y OBJETOS
+	public Boton btnCerrar = new Boton(this);
+	public Boton btnMaximizar = new Boton(this);
+	public Boton btnMinimizar = new Boton(this);
 
 	//ESTADO DE JUEGO
 	public int estadoDeJuego;
@@ -62,6 +70,15 @@ public class PanelDeJuego extends JPanel implements Runnable {
 	
 	public void configuracionDeJuego() {
 		estadoDeJuego = modoCombate;
+		
+		btnCerrar.inicializar(this.anchoDePantalla - 60, 10, 50, 30);
+		btnCerrar.setTexto("X");
+		
+		btnMaximizar.inicializar(this.anchoDePantalla - 128, 10, 50, 30);
+		btnMaximizar.setTexto("⬜");
+		
+		btnMinimizar.inicializar(this.anchoDePantalla - 196, 10, 50, 30);
+		btnMinimizar.setTexto("-");
 	}
 
 	public void iniciarHiloDeJuego() {
@@ -116,6 +133,42 @@ public class PanelDeJuego extends JPanel implements Runnable {
 
 	public void actualizar() {
 
+		btnCerrar.actualizar();
+		btnMaximizar.actualizar();
+		btnMinimizar.actualizar();
+		
+		if(btnCerrar.isPresionado()) {
+			System.exit(0);
+        }
+
+        if(btnMaximizar.isPresionado()) {
+        	JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this);
+
+            if(ventana != null) {
+
+                if ((ventana.getExtendedState() & JFrame.MAXIMIZED_BOTH)
+                        == JFrame.MAXIMIZED_BOTH) {
+
+                    ventana.setExtendedState(JFrame.NORMAL);
+
+                } else {
+
+                    ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+                }
+            }
+        }
+
+        if(btnMinimizar.isPresionado()) {
+        	JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this);
+
+            if(ventana != null) {
+            	this.raton.CLICK =false;
+                ventana.setState(JFrame.ICONIFIED);
+            }
+            
+        }
+		
 		if(estadoDeJuego == modoJuego) {
 			
 			//JUGADR
@@ -133,6 +186,31 @@ public class PanelDeJuego extends JPanel implements Runnable {
 		super.paintComponent(g);
 
 		Graphics2D g2 = (Graphics2D) g;
+
+	    // Tamaño real del panel
+	    int anchoReal = getWidth();
+	    int altoReal = getHeight();
+
+	    // Escala dinámica
+	    double escalaX = (double) anchoReal / anchoDePantalla;
+	    double escalaY = (double) altoReal / altoDePantalla;
+
+	    // Mantener proporción (opcional pero recomendado)
+	    double escala = Math.min(escalaX, escalaY);
+
+	    int offsetX = (int) ((anchoReal - anchoDePantalla * escala) / 2);
+	    int offsetY = (int) ((altoReal - altoDePantalla * escala) / 2);
+	    
+	    raton.setEscala(escala);
+	    raton.setOffset(offsetX, offsetY);
+
+	    g2.translate(offsetX, offsetY);
+
+	    g2.scale(escala, escala);
+		
+	    //DIBUJAR A PARTIR DE AQUI
+	    g2.setColor(Color.white);
+	    g2.drawRect(0, 0, this.anchoDePantalla, this.altoDePantalla);
 		
 		//DEBUG
 		long drawStart = 0;
@@ -155,6 +233,7 @@ public class PanelDeJuego extends JPanel implements Runnable {
 			//JUGADOR Y NPC
 			
 			//UI
+			ui.dibujar(g2);
 			
 		}
 
