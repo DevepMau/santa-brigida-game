@@ -9,6 +9,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		JFrame ventana = new JFrame();
+		ventana.setUndecorated(true);
 		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ventana.setResizable(false);
 		ventana.setTitle("Juego 2D");
@@ -17,7 +18,6 @@ public class Main {
 		ventana.add(pdj);
 
 		ventana.pack();
-
 		ventana.setLocationRelativeTo(null);
 		ventana.setVisible(true);
 		ventana.setResizable(true);
