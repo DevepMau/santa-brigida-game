@@ -1,17 +1,18 @@
 package com.santabrigida.ui;
 
-import java.awt.FontMetrics;
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 
 import com.santabrigida.component.Boton;
 
-public class BotonUI {
-	
+public class BotonIconoUI {
 	Graphics2D g2;
 	public Boton model;
 	
 	
-	public BotonUI(Boton model, Graphics2D g2) {
+	public BotonIconoUI(Boton model, Graphics2D g2) {
 		this.g2 = g2;
 		this.model = model;
 	}
@@ -23,36 +24,31 @@ public class BotonUI {
 		int alto = model.getArea().height;
 		
 		int ajusteAltura = 4;
-
-		g2.setFont(TemaUI.getMarumonica(TemaUI.TAM_BOTON, escalado));
-		String texto = model.getTexto();
-		
-		FontMetrics fm = g2.getFontMetrics();
-		int textoX = x + (ancho - fm.stringWidth(texto)) / 2;
-		int textoY = y + ((alto - fm.getHeight()) / 2) + fm.getAscent();
 		
 		g2.setColor(TemaUI.UI_SOMBRA);
 		g2.fillRoundRect(x + ajusteAltura, y + ajusteAltura, ancho, alto, 8, 8);
 		
-		g2.setColor(TemaUI.UI_PRIMARIO);
+		g2.setColor(Color.black);
 		g2.fillRoundRect(x, y, ancho, alto, 8, 8);
 		
 		g2.setColor(TemaUI.UI_TEXTO);
 		g2.drawRoundRect(x, y, ancho, alto, 8, 8);
 
-		g2.drawString(texto, textoX, textoY);
-		
+		Stroke anterior = g2.getStroke();
+		g2.setStroke(new BasicStroke(3));
+
 		if(model.isPresionado()) {
 			g2.setColor(TemaUI.UI_TEXTO);
 			g2.fillRoundRect(x, y, ancho, alto, 8, 8);
 		}
 		else if(model.isResaltado()) {
-			g2.setColor(TemaUI.UI_LUZ);
-			g2.fillRoundRect(x, y, ancho, alto, 8, 8);
-			
-			g2.setColor(TemaUI.UI_SOMBRA);
-			g2.drawString(texto, textoX, textoY);
-		}	
+			g2.setColor(TemaUI.UI_DORADO);
+			g2.drawRoundRect(x, y, ancho, alto, 8, 8);
+		}
+		
+		g2.setStroke(anterior);
+		
+		g2.drawImage(model.getIcono(), x, y, null);
 		
 	}
 
