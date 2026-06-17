@@ -29,9 +29,38 @@ public class GestorUI {
 		BotonUI btnMaximizar = new BotonUI(pdj.btnMaximizar, g2);
 		BotonUI btnMinimizar = new BotonUI(pdj.btnMinimizar, g2);
 		
+		switch(pdj.estadoDeJuego) {
+		case 5 -> dibujarUIFormacion(g2);
+		}
+		
 		btnMinimizar.dibujar(escala);
 		btnMaximizar.dibujar(escala);
 		btnCerrar.dibujar(escala);
+	}
+	
+	public void dibujarTabla(Graphics2D g2) {
+		int baldosa = pdj.tamañoDeBaldosa;
+		int x = 0;
+		int y = 0;
+		
+		g2.setColor(TemaUI.COL_BORDER);
+		for(int i = 0; i < pdj.maxFilaDePantalla; i++) {
+			g2.drawRect(x, y, baldosa, baldosa);
+			
+			
+			for(int j = 0; j < pdj.maxColDePantalla; j++) {
+				g2.drawRect(x, y, baldosa, baldosa);
+				x += baldosa;
+			}
+			x = 0;
+			y += baldosa;
+		}
+	}
+	
+	public void dibujarUIFormacion(Graphics2D g2){
+		dibujarTabla(g2);
+		FormacionUI formacion = new FormacionUI(pdj.formacion, g2);
+		formacion.dibujar(escala, pdj.fotograma);
 	}
 
 }

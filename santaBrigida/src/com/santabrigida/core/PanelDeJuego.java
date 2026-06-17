@@ -4,11 +4,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import com.santabrigida.combat.Formacion;
+import com.santabrigida.component.Boton;
+import com.santabrigida.entity.Entidad;
+import com.santabrigida.enums.Nombre;
 import com.santabrigida.ui.GestorUI;
 
 public class PanelDeJuego extends JPanel implements Runnable {
@@ -33,16 +39,21 @@ public class PanelDeJuego extends JPanel implements Runnable {
 
 	//SISTEMA
 	public Teclado teclado = new Teclado(this);
-	Raton raton = new Raton(this);
+	public Raton raton = new Raton(this);
 	Sonido musica = new Sonido();
 	Sonido se = new Sonido();
 	GestorUI ui = new GestorUI(this);
+	public GestorDeRecursos gdr = new GestorDeRecursos(this);
+	public Formacion formacion = new Formacion(this);
 	Thread hiloDeJuego;
 	
 	//ENTIDADES Y OBJETOS
 	public Boton btnCerrar = new Boton(this);
 	public Boton btnMaximizar = new Boton(this);
 	public Boton btnMinimizar = new Boton(this);
+	public List<Entidad> banda = new ArrayList<>();
+	
+	
 
 	//ESTADO DE JUEGO
 	public int estadoDeJuego;
@@ -52,6 +63,13 @@ public class PanelDeJuego extends JPanel implements Runnable {
 	public final int modoPausa = 2;
 	public final int modoDialogo = 3;
 	public final int modoCombate = 4;
+	public final int modoFormacion = 5;
+	
+	//VARIABLES GLOBALES
+	public final int VEL_ANIMACION = 8;
+	public final int MAX_FOTOGRAMAS = 4;
+	public int fotograma = 0;
+	public int timerAnimacion = VEL_ANIMACION;
 	
 	// FPS
 	int FPS = 60;
@@ -69,7 +87,7 @@ public class PanelDeJuego extends JPanel implements Runnable {
 	}
 	
 	public void configuracionDeJuego() {
-		estadoDeJuego = modoCombate;
+		estadoDeJuego = modoFormacion;
 		
 		btnCerrar.inicializar(this.anchoDePantalla - 60, 10, 50, 30);
 		btnCerrar.setTexto("X");
@@ -79,6 +97,13 @@ public class PanelDeJuego extends JPanel implements Runnable {
 		
 		btnMinimizar.inicializar(this.anchoDePantalla - 196, 10, 50, 30);
 		btnMinimizar.setTexto("-");
+		
+		banda.add(gdr.getPersonaje(Nombre.MAYKI));
+		banda.add(gdr.getPersonaje(Nombre.KAYAN));
+		banda.add(gdr.getPersonaje(Nombre.CHAVO));
+		banda.add(gdr.getPersonaje(Nombre.TORNI));
+		banda.add(gdr.getPersonaje(Nombre.NICO));
+		banda.add(gdr.getPersonaje(Nombre.CECI));
 	}
 
 	public void iniciarHiloDeJuego() {
@@ -131,54 +156,40 @@ public class PanelDeJuego extends JPanel implements Runnable {
 
 	}
 
-	public void actualizar() {
-
-		btnCerrar.actualizar();
-		btnMaximizar.actualizar();
-		btnMinimizar.actualizar();
+	public void actualizar() {	
+		accionBtnCerrar();
+		accionBtnMaxim();
+		accionBtnMinim();
 		
-		if(btnCerrar.isPresionado()) {
-			System.exit(0);
-        }
-
-        if(btnMaximizar.isPresionado()) {
-        	JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this);
-
-            if(ventana != null) {
-
-                if ((ventana.getExtendedState() & JFrame.MAXIMIZED_BOTH)
-                        == JFrame.MAXIMIZED_BOTH) {
-
-                    ventana.setExtendedState(JFrame.NORMAL);
-
-                } else {
-
-                    ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-                }
-            }
-        }
-
-        if(btnMinimizar.isPresionado()) {
-        	JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this);
-
-            if(ventana != null) {
-            	this.raton.CLICK =false;
-                ventana.setState(JFrame.ICONIFIED);
-            }
-            
-        }
-		
-		if(estadoDeJuego == modoJuego) {
-			
-			//JUGADR
-			
-			//NPC
+		if(estadoDeJuego == modoJuego) {	
 		}
 		if(estadoDeJuego == modoPausa) {
 			
 		}
 		if(estadoDeJuego == modoCombate) {
+		}
+		if(estadoDeJuego == modoFormacion) {
+			iniciarAnimacion();
+			formacion.setEquipo(banda);
+			formacion.actualizar();
+		}
+	}
+	
+	public void iniciarAnimacion() {
+		if(timerAnimacion > 0) {
+			timerAnimacion--;
+		}
+		else {
+            timerAnimacion = VEL_ANIMACION;
+            actualizarFotograma();
+        }
+	}
+	
+	private void actualizarFotograma() {
+		if((fotograma + 1) < MAX_FOTOGRAMAS) {
+			fotograma++;
+		} else {
+			fotograma = 0;
 		}
 	}
 
@@ -247,5 +258,39 @@ public class PanelDeJuego extends JPanel implements Runnable {
 
 		g2.dispose();
 
+	}
+	
+	//METODOS VARIOS
+	
+	private void accionBtnCerrar() {
+		btnCerrar.actualizar();
+		if(btnCerrar.isPresionado()) {
+			System.exit(0);
+        }
+	}
+	
+	private void accionBtnMaxim() {
+		btnMaximizar.actualizar();
+        if(btnMaximizar.isPresionado()) {
+        	JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this);
+            if(ventana != null) {
+                if ((ventana.getExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH) {
+                    ventana.setExtendedState(JFrame.NORMAL);
+                } else {
+                    ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                }
+            }
+        }
+	}
+	
+	private void accionBtnMinim() {
+		btnMinimizar.actualizar();
+        if(btnMinimizar.isPresionado()) {
+        	JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this);
+            if(ventana != null) {
+            	this.raton.CLICK =false;
+                ventana.setState(JFrame.ICONIFIED);
+            }  
+        }
 	}
 }
