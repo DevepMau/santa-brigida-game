@@ -24,7 +24,7 @@ public class Teclado implements KeyListener {
 		int codigo = e.getKeyCode();
 		
 		//MODO JUEGO
-		if(pdj.estadoDeJuego == pdj.modoJuego) {
+		if(pdj.estadoDeJuego == pdj.modoJuego || pdj.estadoDeJuego == pdj.modoFormacion) {
 			
 			if(codigo == KeyEvent.VK_W) {
 				W = true;
