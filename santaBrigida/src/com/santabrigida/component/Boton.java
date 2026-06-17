@@ -1,6 +1,9 @@
-package com.santabrigida.core;
+package com.santabrigida.component;
 
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+
+import com.santabrigida.core.PanelDeJuego;
 
 public class Boton {
 	
@@ -17,6 +20,8 @@ public class Boton {
 	private boolean delayOK;
 	
 	private boolean clickOK;
+	
+	private BufferedImage icono;
 	
 	public Boton(PanelDeJuego pdj) {
 		this.pdj = pdj;
@@ -140,6 +145,14 @@ public class Boton {
 
 	public void setArea(Rectangle area) {
 		this.area = area;
+	}
+
+	public BufferedImage getIcono() {
+		return icono;
+	}
+
+	public void setIcono(BufferedImage icono) {
+		this.icono = icono;
 	}
 
 }
