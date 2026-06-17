@@ -29,8 +29,8 @@ public class GestorUI {
 		BotonUI btnMaximizar = new BotonUI(pdj.btnMaximizar, g2);
 		BotonUI btnMinimizar = new BotonUI(pdj.btnMinimizar, g2);
 		
-		switch(pdj.estadoDeJuego) {
-		case 5 -> dibujarUIFormacion(g2);
+		switch(pdj.modoJuego) {
+		case 3 -> dibujarUIFormacion(g2);
 		}
 		
 		btnMinimizar.dibujar(escala);

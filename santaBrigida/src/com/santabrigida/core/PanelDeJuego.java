@@ -56,14 +56,13 @@ public class PanelDeJuego extends JPanel implements Runnable {
 	
 
 	//ESTADO DE JUEGO
-	public int estadoDeJuego;
+	public int modoJuego;
 	
-	public final int modoTitulo = 0;
-	public final int modoJuego = 1;
-	public final int modoPausa = 2;
-	public final int modoDialogo = 3;
-	public final int modoCombate = 4;
-	public final int modoFormacion = 5;
+	public final int INICIO = 0;
+	public final int COMBATE = 1;
+	public final int EXPLORACION = 2;
+	public final int FORMACION = 3;
+	public final int PAUSA = 4;
 	
 	//VARIABLES GLOBALES
 	public final int VEL_ANIMACION = 8;
@@ -87,7 +86,7 @@ public class PanelDeJuego extends JPanel implements Runnable {
 	}
 	
 	public void configuracionDeJuego() {
-		estadoDeJuego = modoFormacion;
+		modoJuego = FORMACION;
 		
 		btnCerrar.inicializar(this.anchoDePantalla - 60, 10, 50, 30);
 		btnCerrar.setTexto("X");
@@ -161,17 +160,18 @@ public class PanelDeJuego extends JPanel implements Runnable {
 		accionBtnMaxim();
 		accionBtnMinim();
 		
-		if(estadoDeJuego == modoJuego) {	
+		if(modoJuego == INICIO) {	
 		}
-		if(estadoDeJuego == modoPausa) {
-			
+		if(modoJuego == EXPLORACION) {
 		}
-		if(estadoDeJuego == modoCombate) {
+		if(modoJuego == COMBATE) {
 		}
-		if(estadoDeJuego == modoFormacion) {
+		if(modoJuego == FORMACION) {
 			iniciarAnimacion();
 			formacion.setEquipo(banda);
 			formacion.actualizar();
+		}
+		if (modoJuego == PAUSA) {
 		}
 	}
 	
@@ -229,10 +229,10 @@ public class PanelDeJuego extends JPanel implements Runnable {
 			drawStart = System.nanoTime();
 		}
 		//COMBATE
-		if(estadoDeJuego == modoCombate) {
+		if(modoJuego == COMBATE) {
 		}
 		//PANTALLA DE TITULO
-		if(estadoDeJuego == modoTitulo) {
+		if(modoJuego == INICIO) {
 		}
 		//OTROS
 		else {

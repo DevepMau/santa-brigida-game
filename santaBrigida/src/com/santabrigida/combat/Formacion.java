@@ -126,6 +126,7 @@ public class Formacion {
 				}
 			}
 			System.out.println("//////////////////////////");
+			pdj.modoJuego = pdj.EXPLORACION;
 		}
 		
 		if(btnAceptar.isPresionado() || (pdj.teclado.ENTER && botonOK)) {
