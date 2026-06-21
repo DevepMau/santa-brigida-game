@@ -13,7 +13,8 @@ public class Sonido {
 
 	public Sonido() {
 
-		urlSonidos[0] = getClass().getResource("/sonidos/key_sound.wav");
+		urlSonidos[0] = getClass().getResource("/sonidos/boton_move.wav");
+		urlSonidos[1] = getClass().getResource("/sonidos/boton_press.wav");
 
 	}
 
