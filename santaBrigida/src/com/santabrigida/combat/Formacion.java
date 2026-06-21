@@ -54,9 +54,9 @@ public class Formacion {
 	}
 	
 	public void actualizar() {
-		cambiarPersonaje();
 		habilitarBotones();
 		actualizarBotones();
+		cambiarPersonaje();
 
 	}
 	
@@ -73,8 +73,8 @@ public class Formacion {
 		int x = 80;
 		int y = 2*48;
 		int ancho = 32;
-		int alto = 8*48;
-		int separacion = 7*48;
+		int alto = 4*48;
+		int separacion = 4*48 + 8;
 		int ajusteEfectoAltura = -4;
 		int xAceptar = 4*48;
 		int yAceptar = 10*48 + 8;
@@ -87,13 +87,13 @@ public class Formacion {
 		this.btnAceptar = new Boton(pdj);
 		this.btnGuardar = new Boton(pdj);
 		
-		this.btnAnterior.inicializar(x, y + ajusteEfectoAltura, ancho, alto);
-		this.btnSiguiente.inicializar(x + separacion, y + ajusteEfectoAltura, ancho, alto);
+		this.btnSiguiente.inicializar(x, y + ajusteEfectoAltura, ancho, alto);
+		this.btnAnterior.inicializar(x, y + ajusteEfectoAltura + separacion, ancho, alto);
 		this.btnAceptar.inicializar(xAceptar, yAceptar, anchoAceptar, altoAceptar);
 		this.btnGuardar.inicializar(xAceptar + separacionAceptarGuardar, yAceptar, anchoAceptar, altoAceptar);
 		
-		this.btnAnterior.setTexto("<");
-		this.btnSiguiente.setTexto(">");
+		this.btnAnterior.setTexto("▼");
+		this.btnSiguiente.setTexto("▲");
 		this.btnAceptar.setTexto("ACEPTAR");
 		this.btnGuardar.setTexto("GUARDAR");
 	}
@@ -114,7 +114,8 @@ public class Formacion {
 		
 		this.selector.actualizar();
 		
-		if(btnGuardar.isPresionado()) {
+		if(btnGuardar.isPresionado() || (pdj.teclado.C && botonOK)) {
+			btnGuardar.activarEfecto(1);
 			System.out.println("Guardando equipo...");
 			System.out.println("//////////////////////////");
 			for(Entidad miembro : equipo) {
@@ -129,8 +130,9 @@ public class Formacion {
 			pdj.modoJuego = pdj.EXPLORACION;
 		}
 		
-		if(btnAceptar.isPresionado() || (pdj.teclado.ENTER && botonOK)) {
+		if(btnAceptar.isPresionado() || (pdj.teclado.X && botonOK)) {
 			botonOK = false;
+			btnAceptar.activarEfecto(1);
 			eliminarPosicion(selector.getIndice());
 			establecerPosicion(selector.getIndice());
 		}
@@ -199,20 +201,22 @@ public class Formacion {
 	}
 	
 	private void cambiarPersonaje() {
-		if((pdj.teclado.D && botonOK) || btnSiguiente.isPresionado()) {
+		if((pdj.teclado.ARRIBA && botonOK) || btnSiguiente.isPresionado()) {
 			botonOK = false;
+			btnSiguiente.activarEfecto(0);
 			siguiente();
 			cargarDatosPersonaje(personajes.get(indice));
 		}
-		if((pdj.teclado.A && botonOK) || btnAnterior.isPresionado()) {
+		if((pdj.teclado.ABAJO && botonOK) || btnAnterior.isPresionado()) {
 			botonOK = false;
+			btnAnterior.activarEfecto(0);
 			anterior();
 			cargarDatosPersonaje(personajes.get(indice));
 		}
 	}
 	
 	private void habilitarBotones() {
-		if(!pdj.teclado.A && !pdj.teclado.D && !pdj.teclado.ENTER) {
+		if(!pdj.teclado.ARRIBA && !pdj.teclado.ABAJO && !pdj.teclado.C && !pdj.teclado.X) {
 			botonOK = true;
 		}
 	}

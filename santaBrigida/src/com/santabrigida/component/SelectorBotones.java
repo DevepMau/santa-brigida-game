@@ -8,12 +8,14 @@ public class SelectorBotones extends Boton {
 	
 	private ArrayList<Boton> botones;
 	private boolean botonOK;
+	private boolean sonidoOk;
 	private int indice;
 
 	public SelectorBotones(PanelDeJuego pdj, ArrayList<Boton> botones) {
 		super(pdj);
 		this.botones = botones;
 		this.botonOK = true;
+		this.sonidoOk = true;
 		this.indice = 0;
 	}
 	
@@ -34,24 +36,37 @@ public class SelectorBotones extends Boton {
 	}
 	
 	private void cambiarBoton(int cursorX, int cursorY) {
-		if(this.getPdj().teclado.W && botonOK) {
+		if(this.getPdj().teclado.DERECHA && botonOK) {
 			botonOK = false;
 			siguiente();
+			this.getPdj().ReproducirSE(0);
 		}
-		if(this.getPdj().teclado.S && botonOK) {
+		if(this.getPdj().teclado.IZQUIERDA && botonOK) {
 			botonOK = false;
-			anterior();		
+			anterior();
+			this.getPdj().ReproducirSE(0);
 		}
+		boolean sobreBoton = false;
+
 		for(int i = 0; i < botones.size(); i++) {
-			if(botones.get(i).getArea().contains(cursorX, cursorY)) {
-				indice = i;
-			}
-		}	
+		    if(botones.get(i).getArea().contains(cursorX, cursorY)) {
+		        sobreBoton = true;
+		        indice = i;
+		        if(sonidoOk) {
+		            this.getPdj().ReproducirSE(0);
+		            sonidoOk = false;
+		        }
+		        break;
+		    }
+		}
+		if(!sobreBoton) {
+		    sonidoOk = true;
+		}
 		botones.get(indice).setResaltado(true);
 	}
 	
 	private void habilitarBotones() {
-		if(!this.getPdj().teclado.W && !this.getPdj().teclado.S) {
+		if(!this.getPdj().teclado.DERECHA && !this.getPdj().teclado.IZQUIERDA) {
 			botonOK = true;
 		}
 	}

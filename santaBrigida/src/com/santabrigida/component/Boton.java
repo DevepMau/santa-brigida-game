@@ -7,7 +7,7 @@ import com.santabrigida.core.PanelDeJuego;
 
 public class Boton {
 	
-	private final int DELAY = 20;
+	private final int DELAY = 15;
 	
 	PanelDeJuego pdj;
 	private String texto;
@@ -48,6 +48,11 @@ public class Boton {
 		
 		detectarRatonPresionado(click);
 
+	}
+	
+	public void activarEfecto(int i) {
+		this.resaltado = true;
+		pdj.ReproducirSE(i);
 	}
 	
 	private void detectarRatonColision(int cursorX, int cursorY) {
