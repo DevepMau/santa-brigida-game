@@ -6,7 +6,8 @@ import java.awt.event.KeyListener;
 public class Teclado implements KeyListener {
 
 	PanelDeJuego pdj;
-	public boolean W, S, A, D, ENTER, ESCAPE;
+	public boolean ENTER, ESCAPE;
+	public boolean Z, X, C, IZQUIERDA, DERECHA, ARRIBA, ABAJO;
 	//DEBUG
 	boolean comprobarTiempoDeDibujado = false;
 	
@@ -26,18 +27,30 @@ public class Teclado implements KeyListener {
 		//MODO JUEGO
 		if(pdj.modoJuego == pdj.EXPLORACION || pdj.modoJuego == pdj.FORMACION || pdj.modoJuego == pdj.COMBATE) {
 			
-			if(codigo == KeyEvent.VK_W) {
-				W = true;
+			//CONTROLES ACCION
+			if(codigo == KeyEvent.VK_Z) {
+				Z = true;
 			}
-			if(codigo == KeyEvent.VK_S) {
-				S = true;
+			if(codigo == KeyEvent.VK_X) {
+				X = true;
 			}
-			if(codigo == KeyEvent.VK_A) {
-				A = true;
+			if(codigo == KeyEvent.VK_C) {
+				C = true;
 			}
-			if(codigo == KeyEvent.VK_D) {
-				D = true;
+			//CONTROLES MOVIMIENTO/NAVEGACION
+			if(codigo == KeyEvent.VK_LEFT) {
+				IZQUIERDA = true;
 			}
+			if(codigo == KeyEvent.VK_RIGHT) {
+				DERECHA = true;
+			}
+			if (codigo == KeyEvent.VK_UP) {
+				ARRIBA = true;
+			}
+			if (codigo == KeyEvent.VK_DOWN) {
+				ABAJO = true;
+			}
+			//OTROS CONTROLES
 			if(codigo == KeyEvent.VK_P) {
 				pdj.modoJuego = pdj.PAUSA;
 			}
@@ -77,17 +90,26 @@ public class Teclado implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		int codigo = e.getKeyCode();
 
-		if(codigo == KeyEvent.VK_W) {
-			W = false;
+		if(codigo == KeyEvent.VK_Z) {
+			Z = false;
 		}
-		if(codigo == KeyEvent.VK_S) {
-			S = false;
+		if(codigo == KeyEvent.VK_X) {
+			X = false;
 		}
-		if(codigo == KeyEvent.VK_A) {
-			A = false;
+		if(codigo == KeyEvent.VK_C) {
+			C = false;
 		}
-		if(codigo == KeyEvent.VK_D) {
-			D = false;
+		if(codigo == KeyEvent.VK_LEFT) {
+			IZQUIERDA = false;
+		}
+		if(codigo == KeyEvent.VK_RIGHT) {
+			DERECHA = false;
+		}
+		if(codigo == KeyEvent.VK_UP) {
+			ARRIBA = false;
+		}
+		if(codigo == KeyEvent.VK_DOWN) {
+			ABAJO = false;
 		}
 		if(codigo == KeyEvent.VK_ENTER) {
 			ENTER = false;
